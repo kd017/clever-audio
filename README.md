@@ -1,2 +1,3 @@
-# clever-audio
+# Clever*Audio
+
 Neural network driven prediction system...
