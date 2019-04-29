@@ -1,0 +1,38 @@
+body {
+    background-color: whitesmoke;
+}
+
+select {
+    /* display: block; */
+    width: 100%;
+    padding: 8px;
+    color: #8e979f;
+    outline: none;
+}
+
+
+
+#site-head-container {
+    position: relative;
+    text-align: center;
+    align-content: center;
+    
+}
+
+#site-head-image {
+    transform: translate(10%, -10%);
+}
+
+#site-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-20%, 44%);
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+
