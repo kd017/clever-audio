@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Clever Audio - Predictor</title>
+
+
+    <script src="../static/js/jquery-3.4.1.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- Predictor -->
+    <link rel="stylesheet" href="../static/css/predictor.css">
+    <script src="../static/js/predictor.js"></script>
+</head>
+
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top px-5">
+
+            <a class="navbar-brand" href="index.html">
+                <div id="site-head-container">
+                    <img id="site-head-image" src="../static/images/cleveraudio.png" height="40px" alt="">
+                </div>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-md-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="predictor.html">Predictor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="data.html">Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Resources</a>
+                            <div class="dropdown-menu navbar-custom" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" target="_blank"
+                                    href="https://www.grammy.com/recording-academy">Official Grammy Site</a>
+                                <a class="dropdown-item" target="_blank"
+                                    href="https://www.grammy.com/musicares">Musicares - Recording Academy Charity
+                                    Page</a>
+                                <a class="dropdown-item" target="_blank"
+                                    href="https://www.grammy.com/musicares/donations">Donate to Musicares</a>
+                                <a class="dropdown-item" target="_blank"
+                                    href="https://www.grammy.com/grammys/awards/hall-of-fame">Grammy Hall of Fame</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/apidocs" target="_blank"><span class="badge badge-dark">API
+                                1.0.0</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!-- END NAVBAR -->
+
+    <div class="prediction-container">
+        <div id="predict">
+            <div id="result">
+                <h4>Pending song selection...</h4>
+                <br>
+            </div>
+            <div id="song-selection">
+                <div id="song-title">
+                    <div id="song-title-one"><span class="artist-display">Select an Artist</span><span> - </span><span
+                            class="song-display">Select a Song</span><span class="song-title-spacer">|</span></div>
+                    <div id="song-title-two"><span class="artist-display">Select an Artist</span><span> - </span><span
+                            class="song-display">Select a Song</span><span class="song-title-spacer">|</span></div>
+                    <div id="song-title-three"><span class="artist-display">Select an Artist</span><span> - </span><span
+                            class="song-display">Select a Song</span><span class="song-title-spacer">|</span></div>
+                </div>
+                <div id="song-preview"></div>
+            </div>
+            <div id="predict-button">
+                <!-- <h1>PREDICT</h1> -->
+                <button>
+                    <h1>PREDICT</h1>
+                </button>
+            </div>
+        </div>
+
+        <div id="artist-panel" class="front">
+            <div id="artist-tab" class="artist-tab-active">
+                <h4>ARTIST</h4>
+            </div>
+            <div id="artist-bg" class="artist-bg-active">
+                <div class="list-panel">
+                    <h4>Search: <input id="artist-input"></h4>
+                    <ul id="artist-list">
+                        <li artist="Sarah Schachner">Sarah Schachner</li>
+                        <li artist="Epica">Epica</li>
+                        <li artist="Mechina">Mechina</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="song-panel">
+            <div id="song-tab" class="song-tab-inactive">
+                <h4>SONG</h4>
+            </div>
+            <div id="song-bg" class="song-bg-inactive">
+                <div class="list-panel">
+                    <h4>Search: <input id="song-input"></h4>
+                    <ul id="song-list">
+                        <li artist="Mechina">Mass Locked</li>
+                        <li artist="Mechina">Ashes of Old Earth</li>
+                        <li artist="Mechina">Starscape</li>
+                        <li artist="Mechina">Cryoshock</li>
+                        <li artist="Mechina">The Horizon Effect</li>
+                        <li artist="Mechina">Anagenesis</li>
+                        <li artist="Mechina">Planetfall</li>
+                        <li artist="Mechina">Progenitor</li>
+                        <li artist="Epica">Samadhi - Prelude</li>
+                        <li artist="Epica">Resign To Surrender "A New Age Dawns - Prt IV"</li>
+                        <li artist="Epica">Unleasehd</li>
+                        <li artist="Epica">Martyr Of The Free Word</li>
+                        <li artist="Epica">Our Destiny</li>
+                        <li artist="Epica">Kingdom Of Heaven "A New Age Dawns - Prt V"</li>
+                        <li artist="Epica">The Price Of Freedom - Interlude</li>
+                        <li artist="Epica">Burn To A Cinder</li>
+                        <li artist="Epica">Tides Of Time</li>
+                        <li artist="Epica">Deconstruct</li>
+                        <li artist="Epica">Semblance Of Liberty</li>
+                        <li artist="Epica">White Waters</li>
+                        <li artist="Epica">Design Your Universe "A New Age Dawns - Prt VI"</li>
+                        <li artist="Epica">Incentive (Bonus Track)</li>
+                        <li artist="Sarah Schachner">Anthropic Universe</li>
+                        <li artist="Sarah Schachner">Home</li>
+                        <li artist="Sarah Schachner">Rising Threat</li>
+                        <li artist="Sarah Schachner">Olympus Mons</li>
+                        <li artist="Sarah Schachner">Black Sky</li>
+                        <li artist="Sarah Schachner">Operation Black Flag</li>
+                        <li artist="Sarah Schachner">Rally Point</li>
+                        <li artist="Sarah Schachner">Terrible Resolve</li>
+                        <li artist="Sarah Schachner">Infinite Warfare</li>
+                        <li artist="Sarah Schachner">Adrift</li>
+                        <li artist="Sarah Schachner">All or Nothing</li>
+                        <li artist="Sarah Schachner">Endure</li>
+                        <li artist="Sarah Schachner">Peace to the Fallen</li>
+                        <li artist="Sarah Schachner">Sentient Mechanism</li>
+                        <li artist="Sarah Schachner">Europa</li>
+                        <li artist="Sarah Schachner">Reyes</li>
+                        <li artist="Sarah Schachner">Taken Dagger</li>
+                        <li artist="Sarah Schachner">Titan</li>
+                        <li artist="Sarah Schachner">Pyrrhic Victory</li>
+                        <li artist="Sarah Schachner">Faulty Wiring</li>
+                        <li artist="Sarah Schachner">Safe Harbor</li>
+                        <li artist="Sarah Schachner">Fair Winds</li>
+                        <li artist="Sarah Schachner">Phoenix</li>
+                        <li artist="Sarah Schachner">Blood Storm</li>
+                        <li artist="Sarah Schachner">The Retribution</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
