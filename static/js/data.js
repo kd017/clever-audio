@@ -2,11 +2,11 @@ function render_table(url) {
     if (!url) {
         url = "/data?limit=1000";
     }
+    console.log(url)
 
     d3.json(url).then(data => {
-        table_data = data.map(feature => {
-            props = feature.properties;
-            row = [props.ARTIST, props.TITLE, props.YEAR, props.ACOUSTICNESS, props.DANCEABILITY, props.ENERGY, props.EXPLICIT, props.INSTRUMENTALNESS, props.KEY, props.LIVENESS, props.LOUDNESS, props.MODE, props.POPULARITY, props.SPEECHINESS, props.TEMPO, props.VALENCE];
+        table_data = data.map(props => {
+            row = [props.Artist, props.Title, props.Year, props.Acousticness, props.Danceability, props.Energy, props.Explicit, props.Instrumentalness, props.Key, props.Liveness, props.Loudness, props.Mode, props.Popularity, props.Speechiness, props.Tempo, props.Valence];
             return row
         })
 
@@ -59,9 +59,9 @@ function load_dropdowns() {
             .text(d => d);
     });
 
-    url = "/title"
+    url = "/titles"
     d3.json(url).then(title => {
-        
+
         title_dd = d3.select('#date')
         title_dd.selectAll('option')
             .data(states)
@@ -111,5 +111,5 @@ function load_dropdowns() {
     });
 }
 
-load_dropdowns();
+// load_dropdowns();
 render_table();
