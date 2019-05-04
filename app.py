@@ -157,10 +157,10 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/dashboard.html")
+@app.route("/predictor.html")
 def dashboard():
     """Return the homepage."""
-    return render_template("dashboard.html")
+    return render_template("predictor.html")
 
 
 @app.route("/data.html")
