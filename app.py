@@ -138,6 +138,12 @@ def to_array(all):
     v = [asdict(elem) for elem in all]
     return v
 
+##########
+# Load Training Dataset
+#########
+DATA_FILE = os.path.join('data', 'combined-data.csv')
+training_data = pd.read_csv(DATA_FILE)
+
 ##############################
 # Begin API
 ##############################
@@ -225,6 +231,144 @@ def predict():
         artist = 'Michael Jackson'
 
     return jsonify(perform_prediction(title, artist))
+
+@app.route("/data", methods=['GET'], endpoint="v1.caud.data")
+def data():
+    """Returns data used for training & testing
+    ---
+    tags:
+      - Data Access API
+    responses:
+      '200':
+        description: An array of songs with features
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+                Acousticness:
+                    type: number
+                    description: Acousticness of the song
+                    example: 0.987
+                Album:
+                    type: string
+                    description: Name of the album
+                    example: Tutto Modugno (Mister Volare)
+                Artist:
+                    type: string
+                    description: Name of the artist
+                    example: Domenico Modugno
+                Danceability:
+                    type: number
+                    description: Danceability of the song
+                    example: 0.518
+                Duration (ms):
+                    type: number
+                    description: Duration of the song in milli seconds
+                    example: 216373
+                Energy:
+                    type: number
+                    description: Energy of the song
+                    example: 0.06
+                Explicit:
+                    type: boolean
+                    description: Indicates if the song has explicit lyrics
+                    example: false
+                Image:
+                    type: string
+                    description: URL to fetch image of the album/track
+                    example: https://i.scdn.co/image/5e8c49f7a8d161c1d6510999bd867b6a91640dae
+                Instrumentalness:
+                    type: number
+                    description: Instrumentalness of the song
+                    example: 0.00000787
+                Key:
+                    type: number
+                    description: Key of the song
+                    example: 10
+                Liveness:
+                    type: number
+                    description: Liveness of the song
+                    example: 0.161
+                Loudness:
+                    type: number
+                    description: Loudness of the song
+                    example: -14.887
+                Mode:
+                    type: number
+                    description: Mode of the song
+                    example: 1
+                Popularity:
+                    type: number
+                    description: Popularity of the song
+                    example: 35
+                Speechiness:
+                    type: number
+                    description: Speechiness of the song
+                    example: 0.0441
+                Tempo:
+                    type: number
+                    description: Tempo of the song
+                    example: 127.87
+                Time Signature:
+                    type: number
+                    description: Signature of the song
+                    example: 4
+                Title:
+                    type: string
+                    description: Title of the song
+                    example: Nel Blu Dipinto Di Blu (Volare)
+                TrackId:
+                    type: string
+                    description: Track ID of the song
+                    example: 006Ndmw2hHxvnLbJsBFnPx
+                URL:
+                    type: string
+                    description: Spotify URL of the song
+                    example: https://open.spotify.com/track/006Ndmw2hHxvnLbJsBFnPx
+                Valence:
+                    type: number
+                    description: Valence of the song
+                    example: 0.336
+                Winner:
+                    type: number
+                    description: 1 if winner
+                    example: 1
+                Year:
+                    type: number
+                    description: Year of release
+                    example: 1958
+      '500':
+        description: Failure
+    """
+    return jsonify(training_data.to_dict(orient='records'))
+
+@app.route("/tracks", methods=['GET'], endpoint="v1.caud.tracks")
+def tracs():
+    """Returns tracks (title & artist)
+    ---
+    tags:
+      - Data Access API
+    responses:
+      '200':
+        description: An array of songs with features
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+                title:
+                    type: string
+                    description: Title of the song
+                    example: "Beat it"
+                artist:
+                    type: string
+                    description: Artist of the song
+                    example: "Michael Jackson"
+      '500':
+        description: Failure
+    """
+    return jsonify(training_data[['Title', 'Artist']].to_dict(orient='records'))
 
 if __name__ == "__main__":
     app.run(debug=True)
