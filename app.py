@@ -226,5 +226,46 @@ def predict():
 
     return jsonify(perform_prediction(title, artist))
 
+@app.route("/news", methods=['GET'], endpoint="v1.caud.news")
+def news():
+    """Returns news items from static content DB
+    ---
+    tags:
+      - Data Access API
+    responses:
+      '200':
+        description: An array of news items
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+                title:
+                    type: string
+                    description: Title of the news article
+                    example: "Seeking drought relief: The Navajo turn to NASA"
+                href: 
+                    type: string
+                    description: Hyperlink of the news article
+                    example: "https://climate.nasa.gov/news/2853/seeking-drought-relief-the-navajo-turn-to-nasa/"
+                image: 
+                    type: string
+                    description: Image of the news article
+                    example: "https://climate.nasa.gov/system/news_items/list_view_images/2853_20190322-WildHorses-320x240.jpg"
+                index:
+                    type: number
+                    description: Index in the DB
+                    example: 0
+                teaser: 
+                    type: string
+                    description: Teaser of the news article
+                    example: "Combining precipitation data from various sources, NASA’s Western Water Applications Office (WWAO), the Navajo Nation and the Desert Research Institute are working together to improve the Navajos’ ability to monitor and report drought."
+      '500':
+        description: Failure
+    """
+    df = pd.read_csv(os.path.join('data', 'news.csv'))
+
+    return jsonify(df.to_dict(orient='records'))
+
 if __name__ == "__main__":
     app.run(debug=True)
