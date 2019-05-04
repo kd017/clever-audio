@@ -157,6 +157,7 @@ $(document).ready(function() {
                 songDisplay.text("Select a Song");
                 allSongItems.hide();
                 resultDisplay.text("Pending song selection...");
+                resultDisplay.removeClass("result-display-winner result-display-loser");
                 songPreview.addClass("song-preview-inactive");
                 songPreview.removeClass("song-preview-active");
                 predictButton.addClass("predict-button-inactive");
@@ -174,6 +175,7 @@ $(document).ready(function() {
                 allSongItems.hide();
                 $(`#song-list li[artist="${$(this).text()}"]`).show();
                 resultDisplay.text("Pending song selection...");
+                resultDisplay.removeClass("result-display-winner result-display-loser");
                 songPreview.addClass("song-preview-inactive");
                 songPreview.removeClass("song-preview-active");
                 predictButton.addClass("predict-button-inactive");
@@ -191,6 +193,7 @@ $(document).ready(function() {
             allArtistItems.removeClass("selected");
             $(`#artist-list li[artist="${selectedArtist}"]`).toggleClass("selected");
             resultDisplay.text("Click PREDICT");
+            resultDisplay.removeClass("result-display-winner result-display-loser");
             songPreview.addClass("song-preview-active");
             songPreview.removeClass("song-preview-inactive");
             predictButton.addClass("predict-button-active");
@@ -206,6 +209,13 @@ $(document).ready(function() {
                 $.each(data, function(key, value) {
                     if (key === "prediction") {
                         resultDisplay.text(value);
+
+                        if (value === "Winner") {
+                            resultDisplay.addClass("result-display-winner");
+                        }
+                        else {
+                            resultDisplay.addClass("result-display-loser");
+                        }
                     }
                 });
             });
