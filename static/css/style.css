@@ -1,5 +1,9 @@
+html,
 body {
-    background-color: whitesmoke;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(34, 34, 34);
 }
 
 select {
@@ -9,8 +13,6 @@ select {
     color: #8e979f;
     outline: none;
 }
-
-
 
 #site-head-container {
     position: relative;
@@ -35,4 +37,25 @@ select {
         1px 1px 0 #000;
 }
 
+.wrapper {
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 130px;
+    overflow: auto;
+}
 
+.parallax {
+    position: relative;
+    height: 400px;
+    padding: 20px;
+    margin: 0 auto;
+    background: black;
+    background-image: url("../images/abstract-q-c-1920-550-3.jpg");
+    background-attachment: fixed;
+    background-position: bottom center;
+    background-size: cover;
+}
+
+.parallax h1 {
+    padding-top: 180px;
+}
