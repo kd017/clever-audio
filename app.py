@@ -344,7 +344,7 @@ def data():
     return jsonify(training_data.to_dict(orient='records'))
 
 @app.route("/tracks", methods=['GET'], endpoint="v1.caud.tracks")
-def tracs():
+def tracks():
     """Returns tracks (title & artist)
     ---
     tags:
@@ -357,18 +357,29 @@ def tracs():
           items:
             type: object
             properties:
-                title:
+                Title:
                     type: string
                     description: Title of the song
                     example: "Beat it"
-                artist:
+                Artist:
                     type: string
                     description: Artist of the song
                     example: "Michael Jackson"
+                Image:
+                    type: string
+                    description: Image of the Album/Track
+                    example: "https://i.scdn.co/image/34b1c4afdd8e576fb048e9e6c900c6c9fe33ea76"
+                Preview:
+                    type: string
+                    description: Image of the Album/Track
+                    example: "https://p.scdn.co/mp3-preview/ce4e9952e1519b9fe6c858b085fbe79077ec9dfb?cid=bca78196e824433fbdf88ec18d84825f"
       '500':
         description: Failure
     """
-    return jsonify(training_data[['Title', 'Artist']].to_dict(orient='records'))
+    df = training_data[['Title', 'Artist', 'Image']]
+    df['Preview'] = 'https://p.scdn.co/mp3-preview/ce4e9952e1519b9fe6c858b085fbe79077ec9dfb?cid=bca78196e824433fbdf88ec18d84825f'
+    track_info = df.to_dict(orient='records')
+    return jsonify(track_info)
 
 if __name__ == "__main__":
     app.run(debug=True)
