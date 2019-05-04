@@ -391,6 +391,19 @@ def tracks():
     ---
     tags:
       - Data Access API
+    parameters:
+      - in: query
+        name: title
+        schema:
+          type: string
+          description: Title of the song
+          default: Beat it
+      - in: query
+        name: artist
+        schema:
+          type: string
+          description: Name of the artist
+          default: Michael Jackson
     responses:
       '200':
         description: An array of songs with features
@@ -418,7 +431,18 @@ def tracks():
       '500':
         description: Failure
     """
+    title = request.args.get('title')
+    artist = request.args.get('artist')
+
+
     df = training_data[['Title', 'Artist', 'Image']]
+
+    if title is not None:
+        df = df[df.Title.str.contains(title, case=False)]
+
+    if artist is not None:
+        df = df[df.Artist.str.contains(artist, case=False)]
+
     df['Preview'] = 'https://p.scdn.co/mp3-preview/ce4e9952e1519b9fe6c858b085fbe79077ec9dfb?cid=bca78196e824433fbdf88ec18d84825f'
     track_info = df.to_dict(orient='records')
     return jsonify(track_info)
