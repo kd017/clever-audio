@@ -9,3 +9,4 @@ pandas==0.23.3
 Keras==2.2.4
 beautifulsoup4==4.7.1
 scikit_learn==0.20.3
+gunicorn==19.7.1
