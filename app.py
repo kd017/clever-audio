@@ -58,6 +58,14 @@ client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def get_features(title, artist):
+    artist = str(artist)
+    if ',' in artist:
+        artists = artist.split(',')
+        for artist in artists:
+            features = get_features(title, artist)
+            if features is not None:
+                return features
+
     results = sp.search(q=f'track:{title} artist:{artist}', type='track', limit=1)
     if len(results['tracks']['items']) == 0:
         results = sp.search(q=f'{title}', type='track', limit=1)
@@ -88,10 +96,41 @@ def get_features(title, artist):
         'Time Signature': features['time_signature'],
         'Valence': features['valence'],
         'Explicit': track_info['explicit'],
-        'Popularity': track_info['popularity']
-
+        'Popularity': track_info['popularity'],
+        'Album': track_info['album']['name'],
+        'Image': track_info['album']['images'][0]['url'] if len(track_info['album']['images'])>0 else None,
+        'Preview': track_info['preview_url']
     }
     return features_as_dict
+
+def get_artists(name):
+    results = sp.search(q=f'artist:{name}', type='artist', limit=50)
+    artists = []
+    items = results['artists']['items']
+    for item in items:
+        artists.append(item['name'])
+    return artists
+
+def get_tracks(title=None, artist=None):
+    if title is None:
+        results = sp.search(q=f'artist:{artist}', type='track', limit=50)
+    elif artist is None:
+        results = sp.search(q=f'track:{title}', type='track', limit=50)
+    else:
+        results = sp.search(q=f'track:{title} artist:{artist}', type='track', limit=50)
+    response = []
+    tracks = results['tracks']['items']
+    for track in tracks:
+        info = {}
+        #pprint(track)
+        info['Image'] = track['album']['images'][0]['url'] if len(track['album']['images'])>0 else None
+        info['Preview'] = track['preview_url']
+        info['Title'] = track['name']
+        info['Artist'] = track['artists'][0]['name']
+        info['TrackId'] = track['id']
+
+        response.append(info)
+    return response
 
 ###############################
 # LOAD Model
@@ -158,7 +197,7 @@ def index():
 
 
 @app.route("/predictor.html")
-def dashboard():
+def predictor():
     """Return the homepage."""
     return render_template("predictor.html")
 
@@ -186,6 +225,9 @@ def perform_prediction(title, artist):
         prediction_info['artist'] = artist
         prediction_info['title'] = title
         prediction_info['prediction'] = 'Winner' if predictions[0] == 1 else 'Non-Winner'
+        prediction_info['preview'] = features['Preview']
+        prediction_info['image'] = features['Image']
+        prediction_info['album'] = features['Album']
         return prediction_info
     pass
 
@@ -280,6 +322,25 @@ def data():
     ---
     tags:
       - Data Access API
+    parameters:
+      - in: query
+        name: title
+        schema:
+          type: string
+          description: Title of the song
+          default: Beat it
+      - in: query
+        name: artist
+        schema:
+          type: string
+          description: Name of the artist
+          default: Michael Jackson
+      - in: query
+        name: limit
+        schema:
+          type: number
+          description: Number of records to return
+          default: 1000
     responses:
       '200':
         description: An array of songs with features
@@ -383,7 +444,22 @@ def data():
       '500':
         description: Failure
     """
-    return jsonify(training_data.to_dict(orient='records'))
+    title = request.args.get('title')
+    artist = request.args.get('artist')
+    limit = request.args.get('limit')
+
+    df = training_data
+
+    if title is not None:
+        df = df[df.Title.str.contains(title, case=False)]
+
+    if artist is not None:
+        df = df[df.Artist.str.contains(artist, case=False)]
+
+    if limit is not None:
+        df = df.head(n=int(limit))
+
+    return jsonify(df.to_dict(orient='records'))
 
 @app.route("/tracks", methods=['GET'], endpoint="v1.caud.tracks")
 def tracks():
@@ -435,7 +511,7 @@ def tracks():
     artist = request.args.get('artist')
 
 
-    df = training_data[['Title', 'Artist', 'Image']]
+    df = training_data[['Title', 'Artist', 'Image', 'Preview']]
 
     if title is not None:
         df = df[df.Title.str.contains(title, case=False)]
@@ -443,10 +519,154 @@ def tracks():
     if artist is not None:
         df = df[df.Artist.str.contains(artist, case=False)]
 
-    df['Preview'] = 'https://p.scdn.co/mp3-preview/ce4e9952e1519b9fe6c858b085fbe79077ec9dfb?cid=bca78196e824433fbdf88ec18d84825f'
+    df.drop_duplicates(inplace=True)
     track_info = df.to_dict(orient='records')
     return jsonify(track_info)
 
+@app.route("/artists", methods=['GET'], endpoint="v1.caud.artists")
+def artists():
+    """Returns artists
+    ---
+    tags:
+      - Data Access API
+    responses:
+      '200':
+        description: An array of artist names
+        schema:
+          type: array
+          items:
+            type: string
+            description: Artist of the song
+            example: "Michael Jackson"
+      '500':
+        description: Failure
+    """
+
+    df = training_data[['Artist']]
+
+    df.drop_duplicates(inplace=True)
+
+    response = df.Artist.tolist()
+    return jsonify(response)
+
+@app.route("/searchartists", methods=['GET'], endpoint="v1.caud.searchartists")
+def search_artists():
+    """Search spotify and return artists matching criteria
+    ---
+    tags:
+      - Data Access API
+    parameters:
+      - in: query
+        name: artist
+        schema:
+          type: string
+          description: name or partial name of artist
+          default: Michael
+    responses:
+      '200':
+        description: An array of artist names
+        schema:
+          type: array
+          items:
+            type: string
+            description: Matching Artist Name
+            example: "Michael Jackson"
+      '500':
+        description: Failure
+    """
+
+    name = request.args.get('artist')
+
+    return jsonify(get_artists(name))
+
+@app.route("/searchtracks", methods=['GET'], endpoint="v1.caud.searchtracks")
+def search_tracks():
+    """Search spotify and return tracks matching criteria
+    ---
+    tags:
+      - Data Access API
+    parameters:
+      - in: query
+        name: artist
+        schema:
+          type: string
+          description: name or partial name of artist
+          default: Michael
+      - in: query
+        name: title
+        schema:
+          type: string
+          description: name or partial name of song
+          default: Beat 
+    responses:
+      '200':
+        description: An array of track details
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+                Image:
+                    type: string
+                    description: Image/Artwork of the song
+                    example: "https://i.scdn.co/image/3c294000d8739af300d9a842934d6f7e090471c7"
+                Preview:
+                    type: string
+                    description: Preview URL of the song
+                    example: "https://p.scdn.co/mp3-preview/4eb779428d40d579f14d12a9daf98fc66c7d0be4?cid=bca78196e824433fbdf88ec18d84825f"
+                Title:
+                    type: string
+                    description: Title of the song
+                    example: "Billie Jean"
+                Artist:
+                    type: string
+                    description: Artist of the song
+                    example: "Micheal Jackson"
+                TrackId:
+                    type: string
+                    description: Spotify Track ID of the song
+                    example: "5ChkMS8OtdzJeqyybCc9R5"
+      '500':
+        description: Failure
+    """
+
+    artist = request.args.get('artist')
+    title = request.args.get('title')
+
+    return jsonify(get_tracks(artist=artist, title=title))
+
+@app.route("/titles", methods=['GET'], endpoint="v1.caud.titles")
+def titles():
+    """Returns titles
+    ---
+    tags:
+      - Data Access API
+    responses:
+      '200':
+        description: An array of song titles
+        schema:
+          type: array
+          items:
+            type: string
+            description: Title of the song
+            example: "Billie Jean"
+      '500':
+        description: Failure
+    """
+
+    df = training_data[['Title']]
+
+    df.drop_duplicates(inplace=True)
+
+    response = df.Title.tolist()
+    return jsonify(response)
 
 if __name__ == "__main__":
+    #print(get_features('Roadhouse Blues', 'Doors'))
+    #print(get_features('Mame', 'Angela Lansbury, Bea Arthur, Jane Connell, Charles Braswell, Jerry Lanning, Frankie Michaels'))
+    #get_artists('Mechina')
+    #get_tracks(artist='Mechina')
+    #get_tracks(title='Cryoshock')
+    #get_tracks(title='Elephtheria')
+    #get_tracks(artist='Mechina', title='Elephtheria')
     app.run(debug=True)
