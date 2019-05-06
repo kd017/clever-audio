@@ -3,4 +3,4 @@ FEATURE_ORDER = ['Year', 'Acousticness', 'Danceability', 'Duration (ms)', 'Energ
        'Speechiness', 'Tempo', 'Time Signature', 'Valence', 'Explicit',
        'Popularity'] 
 
-EXCLUDED_FEATURES = ['Key']
+EXCLUDED_FEATURES = ['Year', 'Key']
