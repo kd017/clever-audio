@@ -16,13 +16,6 @@ html {
     overflow: hidden;
 }
 
-.result-display-winner {
-    color: rgb(0, 255, 0);
-}
-
-.result-display-loser {
-    color: red;
-}
 
 #predict {
     width: 400px;
@@ -34,6 +27,26 @@ html {
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    overflow: hidden;
+}
+
+#result-display {
+    background: darkgrey;
+}
+
+.result-display-winner {
+    color: rgb(0, 255, 0);
+}
+
+.result-display-loser {
+    color: red;
+}
+
+#song-image {
+    position: absolute;
+    margin-left: -200px;
+    z-index: -5;
+    margin-top: -109px;
 }
 
 #song-selection {
@@ -79,7 +92,12 @@ html {
     background: grey;
 }
 
-.song-preview-active {
+.song-preview-pause {
+    background: rgb(0, 145, 145);
+    cursor: pointer;
+}
+
+.song-preview-play {
     background: cyan;
     cursor: pointer;
 }

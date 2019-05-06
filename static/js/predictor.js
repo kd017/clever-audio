@@ -9,7 +9,6 @@ jQuery.expr[':'].caseInsensitiveContains = function(a, i, m) {
 // Selection Variables
 var selectedArtist = "";
 var selectedSong = "";
-var selectedSongPreview = "";
 
 $(document).ready(function() {
     // =====================================
@@ -25,6 +24,7 @@ $(document).ready(function() {
     // var allSongItems = $("#song-list li");
     var songDisplay = $(".song-display");
 
+    var songImage = $("#song-image");
     var resultDisplay = $("#result-display");
     var songPreview = $("#song-preview");
 
@@ -178,6 +178,7 @@ $(document).ready(function() {
             searchArtists(artistInput.val());
         }
         else {
+            // Define variables within the function so that they are usable.
             var allArtistItems = $("#artist-list li");
             var allSongItems = $("#song-list li");
             $("#artist-list li").remove();
@@ -189,10 +190,18 @@ $(document).ready(function() {
             songDisplay.text("Select a Song");
             resultDisplay.text("Pending song selection...");
             resultDisplay.removeClass("result-display-winner result-display-loser");
+            songPreview.removeClass("song-preview-play");
+            songPreview.removeClass("song-preview-pause");
             songPreview.addClass("song-preview-inactive");
-            songPreview.removeClass("song-preview-active");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
+
+            if (songPreviewAudio > "") {
+                songPreviewAudio.pause();
+                songPreviewAudio = "";
+            }
+            
+            songImage.attr("src", "");
         }
     });
 
@@ -224,8 +233,13 @@ $(document).ready(function() {
     // List selectors
     // =====================================
     artistList.on("click", "li", function() {
+        // These variables are defined here so that they can be referenced properly.
+        // Defining them outside of this function leaves them without the necessary
+        // information.
         var allArtistItems = $("#artist-list li");
         var allSongItems = $("#song-list li");
+
+
         // Check to see if the artist is already selected.
         // If yes, clear the selection.  If no, select new artist.
 
@@ -240,10 +254,18 @@ $(document).ready(function() {
             songDisplay.text("Select a Song");
             resultDisplay.text("Pending song selection...");
             resultDisplay.removeClass("result-display-winner result-display-loser");
+            songPreview.removeClass("song-preview-play");
+            songPreview.removeClass("song-preview-pause");
             songPreview.addClass("song-preview-inactive");
-            songPreview.removeClass("song-preview-active");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
+            
+            if (songPreviewAudio > "") {
+                songPreviewAudio.pause();
+                songPreviewAudio = "";
+            }
+            
+            songImage.attr("src", "");
         }
         // Non-selected artist is selected
         else {
@@ -256,15 +278,28 @@ $(document).ready(function() {
             artistDisplay.text(selectedArtist);
             resultDisplay.text("Pending song selection...");
             resultDisplay.removeClass("result-display-winner result-display-loser");
+            songPreview.removeClass("song-preview-play");
+            songPreview.removeClass("song-preview-pause");
             songPreview.addClass("song-preview-inactive");
-            songPreview.removeClass("song-preview-active");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
             searchSongsByArtist(selectedArtist);
+
+            if (songPreviewAudio > "") {
+                songPreviewAudio.pause();
+                songPreviewAudio = "";
+            }
+            
+            songImage.attr("src", "");
         }
     });
 
+
+
+    var songPreviewAudio = "";
+
     songList.on("click", "li", function() {
+        // Define variables within this function again.
         var allArtistItems = $("#artist-list li");
         var allSongItems = $("#song-list li");
         allSongItems.removeClass("selected");
@@ -277,14 +312,43 @@ $(document).ready(function() {
         $(`#artist-list li[artist="${selectedArtist}"]`).addClass("selected");
         resultDisplay.text("Click PREDICT");
         resultDisplay.removeClass("result-display-winner result-display-loser");
-        songPreview.addClass("song-preview-active");
         songPreview.removeClass("song-preview-inactive");
+        songPreview.removeClass("song-preview-play");
+        songPreview.addClass("song-preview-pause");
         predictButton.addClass("predict-button-active");
         predictButton.removeClass("predict-button-inactive");
-        selectedSongPreview = $(this).attr("preview");
-    });
-    
 
+        if (songPreviewAudio > "") {
+            songPreviewAudio.pause();
+            songPreviewAudio = "";
+        }
+
+        // Prevent play button from activating if preview is null.
+        if ($(this).attr("preview") !== "null") {
+            songPreviewAudio = new Audio($(this).attr("preview"));
+        }
+        else {
+            songPreview.removeClass("song-preview-pause");
+            songPreview.addClass("song-preview-inactive");
+        }
+
+        songImage.attr("src", "");
+        songImage.attr("src", $(this).attr("image"));
+
+    });
+
+    songPreview.on("click", function() {
+        if (songPreview.hasClass("song-preview-pause")) {
+            songPreview.removeClass("song-preview-pause");
+            songPreview.addClass("song-preview-play");
+            songPreviewAudio.play();
+        }
+        else if (songPreview.hasClass("song-preview-play")) {
+            songPreview.removeClass("song-preview-play");
+            songPreview.addClass("song-preview-pause");
+            songPreviewAudio.pause();
+        }
+    })
 
 
 
