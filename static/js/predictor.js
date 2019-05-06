@@ -9,8 +9,120 @@ jQuery.expr[':'].caseInsensitiveContains = function(a, i, m) {
 // Selection Variables
 var selectedArtist = "";
 var selectedSong = "";
+var selectedSongPreview = "";
 
 $(document).ready(function() {
+    // =====================================
+    // List selector variables
+    // =====================================
+    var artistInput = $("#artist-input");
+    var artistList = $("#artist-list");
+    // var allArtistItems = $("#artist-list li");
+    var artistDisplay = $(".artist-display");
+
+    var songInput = $("#song-input");
+    var songList = $("#song-list");
+    // var allSongItems = $("#song-list li");
+    var songDisplay = $(".song-display");
+
+    var resultDisplay = $("#result-display");
+    var songPreview = $("#song-preview");
+
+    var predictButton = $("#predict-button");
+
+    // =====================================
+    // Functions
+    // =====================================
+    // Artist only search
+    function searchArtists(artist) {
+        $("#artist-list li").remove();
+        $.getJSON(`/searchartists?artist=${artist}`, function(artistArray) {
+            artistArray.map(artistName => {
+                artistList.append(`<li artist="${artistName}">${artistName}</li>`);
+            });
+        });
+    }
+
+    // Songs by artist (will update songs list once an artists is selected)
+    function searchSongsByArtist(artist) {
+        $("#song-list li").remove();
+        $.getJSON(`/searchtracks?artist=${artist}`, function(songObjects) {
+            $.each(songObjects, function(key, value) {
+                var artist = ""
+                var image = ""
+                var preview = ""
+                $.each(value, function(key, value) {
+                    if (key === "Artist") {
+                        artist = value;
+                    }
+                    if (key === "Image") {
+                        image = value;
+                    }
+                    if (key === "Preview") {
+                        preview = value;
+                    }
+                    if (key === "Title") {
+                        songList.append(`<li artist="${artist}" image="${image}" preview="${preview}">${value}</li>`);
+                    };
+                });
+            });
+        });
+    }
+
+    // Song only search
+    function searchSongsBySong(song) {
+        console.log(songInput.val());
+        $("#song-list li").remove();
+        $.getJSON(`/searchtracks?title=${song}`, function(songObjects) {
+            $.each(songObjects, function(key, value) {
+                var artist = ""
+                var image = ""
+                var preview = ""
+                $.each(value, function(key, value) {
+                    if (key === "Artist") {
+                        artist = value;
+                    }
+                    if (key === "Image") {
+                        image = value;
+                    }
+                    if (key === "Preview") {
+                        preview = value;
+                    }
+                    if (key === "Title") {
+                        songList.append(`<li artist="${artist}" image="${image}" preview="${preview}">${value}</li>`);
+                    };
+                });
+            });
+        });
+    }
+
+    // Songs by artist search
+    function searchSongsbyArtistAndSong(artist, song) {
+        $("#song-list li").remove();
+        $.getJSON(`/searchtracks?artist=${artist}&title=${song}`, function(songObjects) {
+            $.each(songObjects, function(key, value) {
+                var artist = ""
+                var image = ""
+                var preview = ""
+                $.each(value, function(key, value) {
+                    if (key === "Artist") {
+                        artist = value;
+                    }
+                    if (key === "Image") {
+                        image = value;
+                    }
+                    if (key === "Preview") {
+                        preview = value;
+                    }
+                    if (key === "Title") {
+                        songList.append(`<li artist="${artist}" image="${image}" preview="${preview}">${value}</li>`);
+                    };
+                });
+            });
+        });
+    }
+
+
     // =====================================
     // Artist and Song selection panels
     // =====================================
@@ -51,177 +163,153 @@ $(document).ready(function() {
         }
     });
 
-    // =====================================
-    // List selector variables
-    // =====================================
-    var artistInput = $("#artist-input");
-    var artistList = $("#artist-list");
-    var artistDisplay = $(".artist-display");
-
-    var songInput = $("#song-input");
-    var songList = $("#song-list");
-    var songDisplay = $(".song-display");
-
-    var resultDisplay = $("#result-display");
-    var songPreview = $("#song-preview");
-
-    var predictButton = $("#predict-button");
 
 
-
+    resultDisplay.text("Search for a song...");
 
 
     // =====================================
-    // List appenders
+    // Input events
     // =====================================
-    var number = 0;
-    var artists = [];
-    $.getJSON("/tracks", function(data) {
-        $.each(data, function(key, value) {
-            // if (number < 11) {
-                // number += 1;
-                var artist = "";
-                $.each(value, function(key, value) {
-                    if (key === "Artist") {
-                        if (artists.includes(value) === false) {
-                            artists.push(value);
-                            artistList.append(`<li artist="${value}">${value}</li>`);
-                            artist = value;
-                        }
-                        else {
-                            artist = value;
-                        }
-                    }
-                    if (key === "Title") {
-                        songList.append(`<li artist="${artist}">${value}</li>`);
-                    }
-                });
-            // }
-        });
-
-
-    
-        var allArtistItems = $("#artist-list li");
-        var allSongItems = $("#song-list li");
-
-        allArtistItems.hide();
-        allSongItems.hide();
-
-        resultDisplay.text("Pending song selection...");
-
-
-        // =====================================
-        // Input events
-        // =====================================
-        var artistInputSubmit = $("#artist-input-submit");
-        var artistInputForm = $("#artist-input-form");
-        artistInputForm.submit(function(event) {
-            event.preventDefault();
-            if (artistInput.val() > "") {
-                allArtistItems.hide();
-                $(`#artist-list li:caseInsensitiveContains("${artistInput.val()}")`).show();
-            }
-            else {
-                allArtistItems.hide();
-            }
-        });
-
-        var songInputForm = $("#song-input-form");
-        songInputForm.submit(function(event) {
-            event.preventDefault();
-            if (songInput.val() > "") {
-                allSongItems.hide();
-                $(`#song-list li:caseInsensitiveContains("${songInput.val()}")`).show();
-            }
-            else {
-                allSongItems.hide();
-            }
-        });
-
-
-        // =====================================
-        // List selectors
-        // =====================================
-        artistList.on("click", "li", function() {
-            // Check to see if the artist is already selected.
-            // If yes, clear the selection.  If no, select new artist.
-
-            // Currently selected artist is selected
-            if ($(this).hasClass("selected") === true) {
-                allArtistItems.removeClass("selected");
-                allSongItems.removeClass("selected");
-                $(this).removeClass("selected");
-                selectedArtist = "";
-                selectedSong = "";
-                artistDisplay.text("Select an Artist");
-                songDisplay.text("Select a Song");
-                allSongItems.hide();
-                resultDisplay.text("Pending song selection...");
-                resultDisplay.removeClass("result-display-winner result-display-loser");
-                songPreview.addClass("song-preview-inactive");
-                songPreview.removeClass("song-preview-active");
-                predictButton.addClass("predict-button-inactive");
-                predictButton.removeClass("predict-button-active");
-            }
-            // Non-selected artist is selected
-            else {
-                allArtistItems.removeClass("selected");
-                allSongItems.removeClass("selected");
-                $(this).addClass("selected");
-                selectedArtist = $(this).text();
-                selectedSong = "";
-                songDisplay.text("Select a Song");
-                artistDisplay.text(selectedArtist);
-                allSongItems.hide();
-                $(`#song-list li[artist="${$(this).text()}"]`).show();
-                resultDisplay.text("Pending song selection...");
-                resultDisplay.removeClass("result-display-winner result-display-loser");
-                songPreview.addClass("song-preview-inactive");
-                songPreview.removeClass("song-preview-active");
-                predictButton.addClass("predict-button-inactive");
-                predictButton.removeClass("predict-button-active");
-            }
-        });
-
-        songList.on("click", "li", function() {
-            allSongItems.removeClass("selected");
-            $(this).addClass("selected");
-            selectedSong = $(this).text();
-            songDisplay.text(selectedSong);
-            selectedArtist = $(this).attr("artist");
-            artistDisplay.text(selectedArtist);
+    var artistInputForm = $("#artist-input-form");
+    artistInputForm.submit(function(event) {
+        event.preventDefault();
+        if (artistInput.val() > "") {
+            searchArtists(artistInput.val());
+        }
+        else {
+            var allArtistItems = $("#artist-list li");
+            var allSongItems = $("#song-list li");
+            $("#artist-list li").remove();
             allArtistItems.removeClass("selected");
-            $(`#artist-list li[artist="${selectedArtist}"]`).toggleClass("selected");
-            resultDisplay.text("Click PREDICT");
+            allSongItems.removeClass("selected");
+            selectedArtist = "";
+            selectedSong = "";
+            artistDisplay.text("Select an Artist");
+            songDisplay.text("Select a Song");
+            resultDisplay.text("Pending song selection...");
             resultDisplay.removeClass("result-display-winner result-display-loser");
-            songPreview.addClass("song-preview-active");
-            songPreview.removeClass("song-preview-inactive");
-            predictButton.addClass("predict-button-active");
-            predictButton.removeClass("predict-button-inactive");
-        });
+            songPreview.addClass("song-preview-inactive");
+            songPreview.removeClass("song-preview-active");
+            predictButton.addClass("predict-button-inactive");
+            predictButton.removeClass("predict-button-active");
+        }
+    });
 
+    var songInputForm = $("#song-input-form");
+    songInputForm.submit(function(event) {
+        event.preventDefault();
 
-
-
-
-        predictButton.on("click", function() {
-            $.getJSON(`/predict?title=${selectedSong}&artist=${selectedArtist}`, function(data) {
-                $.each(data, function(key, value) {
-                    if (key === "prediction") {
-                        resultDisplay.text(value);
-
-                        if (value === "Winner") {
-                            resultDisplay.addClass("result-display-winner");
-                        }
-                        else {
-                            resultDisplay.addClass("result-display-loser");
-                        }
-                    }
-                });
-            });
-        });
-
+        if (selectedArtist > "") {
+            if (songInput.val() > "") {
+                searchSongsbyArtistAndSong(selectedArtist, songInput.val());
+            }
+            else {
+                searchSongsByArtist(selectedArtist);
+            }
+        }
+        else {
+            if (songInput.val() > "") {
+                searchSongsBySong(songInput.val());
+            }
+            else {
+                $("#song-list li").remove();
+            }
+        }
 
     });
+
+
+    // =====================================
+    // List selectors
+    // =====================================
+    artistList.on("click", "li", function() {
+        var allArtistItems = $("#artist-list li");
+        var allSongItems = $("#song-list li");
+        // Check to see if the artist is already selected.
+        // If yes, clear the selection.  If no, select new artist.
+
+        // Currently selected artist is selected
+        if ($(this).hasClass("selected") === true) {
+            allArtistItems.removeClass("selected");
+            allSongItems.removeClass("selected");
+            $(this).removeClass("selected");
+            selectedArtist = "";
+            selectedSong = "";
+            artistDisplay.text("Select an Artist");
+            songDisplay.text("Select a Song");
+            resultDisplay.text("Pending song selection...");
+            resultDisplay.removeClass("result-display-winner result-display-loser");
+            songPreview.addClass("song-preview-inactive");
+            songPreview.removeClass("song-preview-active");
+            predictButton.addClass("predict-button-inactive");
+            predictButton.removeClass("predict-button-active");
+        }
+        // Non-selected artist is selected
+        else {
+            allArtistItems.removeClass("selected");
+            allSongItems.removeClass("selected");
+            $(this).addClass("selected");
+            selectedArtist = $(this).text();
+            selectedSong = "";
+            songDisplay.text("Select a Song");
+            artistDisplay.text(selectedArtist);
+            resultDisplay.text("Pending song selection...");
+            resultDisplay.removeClass("result-display-winner result-display-loser");
+            songPreview.addClass("song-preview-inactive");
+            songPreview.removeClass("song-preview-active");
+            predictButton.addClass("predict-button-inactive");
+            predictButton.removeClass("predict-button-active");
+            searchSongsByArtist(selectedArtist);
+        }
+    });
+
+    songList.on("click", "li", function() {
+        var allArtistItems = $("#artist-list li");
+        var allSongItems = $("#song-list li");
+        allSongItems.removeClass("selected");
+        $(this).addClass("selected");
+        selectedSong = $(this).text();
+        songDisplay.text(selectedSong);
+        selectedArtist = $(this).attr("artist");
+        artistDisplay.text(selectedArtist);
+        allArtistItems.removeClass("selected");
+        $(`#artist-list li[artist="${selectedArtist}"]`).addClass("selected");
+        resultDisplay.text("Click PREDICT");
+        resultDisplay.removeClass("result-display-winner result-display-loser");
+        songPreview.addClass("song-preview-active");
+        songPreview.removeClass("song-preview-inactive");
+        predictButton.addClass("predict-button-active");
+        predictButton.removeClass("predict-button-inactive");
+        selectedSongPreview = $(this).attr("preview");
+    });
+    
+
+
+
+
+
+    predictButton.on("click", function() {
+        $.getJSON(`/predict?title=${selectedSong}&artist=${selectedArtist}`, function(data) {
+            $.each(data, function(key, value) {
+                if (key === "prediction") {
+
+                    if (value === "Winner") {
+                        resultDisplay.addClass("result-display-winner");
+                        resultDisplay.text(value);
+                    }
+                    else if (value === "Non-Winner") {
+                        resultDisplay.addClass("result-display-loser");
+                        resultDisplay.text(value);
+                    }
+                    else {
+                        resultDisplay.text("Song not found...")
+                    }
+                }
+            });
+        });
+    });
+
+
 
 });

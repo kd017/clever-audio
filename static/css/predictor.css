@@ -40,7 +40,7 @@ html {
     display: flex;
     width: 300px;
     height: 35px;
-    padding: 5px;
+    /* padding: 5px; */
     background: lightcyan;
     align-self: center;
     text-align: center;
@@ -213,7 +213,7 @@ html {
 }
 
 .list-panel input {
-    width: 150px;
+    width: 185px;
 }
 
 .list-panel ul {
