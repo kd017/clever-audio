@@ -16,6 +16,7 @@ html {
     overflow: hidden;
 }
 
+
 #predict {
     width: 400px;
     height: 400px;
@@ -26,13 +27,33 @@ html {
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    overflow: hidden;
+}
+
+#result-display {
+    background: darkgrey;
+}
+
+.result-display-winner {
+    color: rgb(0, 255, 0);
+}
+
+.result-display-loser {
+    color: red;
+}
+
+#song-image {
+    position: absolute;
+    margin-left: -200px;
+    z-index: -5;
+    margin-top: -109px;
 }
 
 #song-selection {
     display: flex;
     width: 300px;
     height: 35px;
-    padding: 5px;
+    /* padding: 5px; */
     background: lightcyan;
     align-self: center;
     text-align: center;
@@ -61,14 +82,27 @@ html {
 }
 
 #song-preview {
-    width: 50px;
-    height: 50px;
-    background: blue;
+    width: 45px;
+    height: 35px;
     margin-top: -5px;
     margin-right: -5px;
 }
 
-#predict-button {
+.song-preview-inactive {
+    background: grey;
+}
+
+.song-preview-pause {
+    background: rgb(0, 145, 145);
+    cursor: pointer;
+}
+
+.song-preview-play {
+    background: cyan;
+    cursor: pointer;
+}
+
+#predict-button-container {
     display: flex;
     align-self: center;
     background: grey;
@@ -79,12 +113,19 @@ html {
     margin-top: 25px;
 }
 
-#predict-button button {
+#predict-button {
     /* height: 50px; */
     width: 200px;
-    background: cyan;
     cursor: pointer;
     border-radius: 15px;
+}
+
+.predict-button-inactive {
+    background: grey;
+}
+
+.predict-button-active {
+    background: cyan;    
 }
 
 
@@ -190,7 +231,7 @@ html {
 }
 
 .list-panel input {
-    width: 250px;
+    width: 185px;
 }
 
 .list-panel ul {
