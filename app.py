@@ -57,7 +57,8 @@ os.environ['SPOTIPY_CLIENT_SECRET']=spotify_client_secret
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-def get_features(title, artist):
+def get_features(title, artist, year=None):
+    year_part=f"year:{year}" if year is not None else ''
     artist = str(artist)
     if ',' in artist:
         artists = artist.split(',')
@@ -65,10 +66,14 @@ def get_features(title, artist):
             features = get_features(title, artist)
             if features is not None:
                 return features
-
-    results = sp.search(q=f'track:{title} artist:{artist}', type='track', limit=1)
+            
+    results = sp.search(q=f'track:{title} artist:{artist} {year_part}', type='track', limit=1)
     if len(results['tracks']['items']) == 0:
-        results = sp.search(q=f'{title}', type='track', limit=1)
+        results = sp.search(q=f'{title} artist:{artist} {year_part}', type='track', limit=1)
+    if len(results['tracks']['items']) == 0:
+        results = sp.search(q=f'{title} {year_part}', type='track', limit=1)
+    if len(results['tracks']['items']) == 0:
+        results = sp.search(q=f'artist:{artist} {year_part}', type='track', limit=1)
     if len(results['tracks']['items']) == 0:
         return
     track_info = results['tracks']['items'][0]
