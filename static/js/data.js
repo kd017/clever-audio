@@ -1,6 +1,6 @@
 function render_table(url) {
     if (!url) {
-        url = "/data?limit=1000";
+        url = "/data?limit=5000";
     }
     console.log(url)
 
