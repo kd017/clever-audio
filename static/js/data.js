@@ -6,7 +6,7 @@ function render_table(url) {
 
     d3.json(url).then(data => {
         table_data = data.map(props => {
-            row = [props.Artist, props.Title, props.Year, props.Acousticness, props.Danceability, props.Energy, props.Explicit, props.Instrumentalness, props.Key, props.Liveness, props.Loudness, props.Mode, props.Popularity, props.Speechiness, props.Tempo, props.Valence];
+            row = [props.Artist, props.Title, props.Year, props.Winner, props.Acousticness, props.Danceability, props.Energy, props.Explicit, props.Instrumentalness, props.Mode, props['Time Signature'] ,props.Liveness, props.Loudness, props.Popularity, props.Speechiness, props.Tempo, props.Valence];
             return row
         })
 
@@ -22,22 +22,22 @@ function render_table(url) {
                     autoWidth: false,
                     responsive: true,
                     columns: [
-                        { title: "Artist", width: "8%" },
+                        { title: "Artist", width: "10%"},
                         { title: "Title", width: "15%" },
-                        { title: "Year", width: "23%" },
-                        { title: "Acousticness", width: "9%" },
-                        { title: "Danceability", width: "8%" },
-                        { title: "Energy", width: "8%" },
-                        { title: "Explicit", width: "9%" },
-                        { title: "Instrumentalness", width: "5%" },
-                        { title: "Key", width: "5%" },
-                        { title: "Liveness", width: "5%" },
-                        { title: "Loudness", width: "5%" },
-                        { title: "Mode", width: "5%" },
-                        { title: "Popularity", width: "5%" },
-                        { title: "Speechiness", width: "5%" },
-                        { title: "Tempo", width: "5%" },
-                        { title: "Valence", width: "5%" }
+                        { title: "Year", width: "5%" },
+                        { title: "Winner", width: "5%"},
+                        { title: "Acousticness", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Danceability", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Energy", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Explicit", width: "5%" },
+                        { title: "Instrumentalness", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},                        { title: "Mode", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Time Signature", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Liveness", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Loudness", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Popularity", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Speechiness", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Tempo", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)},
+                        { title: "Valence", width: "5%", render: $.fn.dataTable.render.number( ',', '.', 2)}
                     ],
                     "paging": true,
                     stateSave: true
