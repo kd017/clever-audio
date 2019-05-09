@@ -82,8 +82,9 @@
         <div class="prediction-container">
             <div id="predict">
                 <div id="result">
-                    <img id="song-image" width="400px">
-                    <h4 id="result-display">Loading...</h4>
+                    <div id="result-display">
+                        <div id="result-display-glassfx"></div>
+                    </div>
                     <br>
                 </div>
                 <div id="song-selection">
@@ -96,10 +97,8 @@
                         <audio id="song-audio"></audio>
                     </div>
                 </div>
-                <div id="predict-button-container">
-                    <!-- <h1>PREDICT</h1> -->
-                    <button id="predict-button" class="predict-button-inactive"><h1>PREDICT</h1></button>
-                </div>
+                <div id="predict-button" class="predict-button-inactive"></div>
+                <div id="predictor-body"></div>
             </div>
 
             <div id="artist-panel" class="front">

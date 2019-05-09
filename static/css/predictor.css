@@ -1,5 +1,5 @@
 html {
-    background: rgb(34, 34, 34);
+    background: rgb(14, 19, 29);
 }
 
 .prediction-container {
@@ -18,47 +18,62 @@ html {
 
 
 #predict {
-    width: 400px;
+    width: 444px;
     height: 400px;
-    border-radius: 50%;
-    background: darkgrey;
+    /* background-image: url("../images/predictor/orb-body.png"); */
     z-index: 100;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
     overflow: hidden;
+    pointer-events: none;
+    /* margin: 0 auto; */
 }
 
 #result-display {
-    background: darkgrey;
-}
-
-.result-display-winner {
-    color: rgb(0, 255, 0);
-}
-
-.result-display-loser {
-    color: red;
-}
-
-#song-image {
     position: absolute;
-    margin-left: -200px;
-    z-index: -5;
-    margin-top: -109px;
+    width: 400px;
+    height: 200px;
+    margin-left: 22px;
+    border-top-left-radius: 200px;
+    border-top-right-radius: 200px;
+    overflow: hidden;
+    background-position: 38px -75px;
+    background-size: 324px 324px;
+    background-blend-mode: multiply;
+}
+
+#result-display-glassfx {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    z-index: 104;
+}
+
+.result-display-glassfx-inactive {
+    background: url("../images/predictor/orb-glassfx-inactive.png");
+}
+
+.result-display-glassfx-active {
+    background: url("../images/predictor/orb-glassfx-active.png");
+}
+
+.result-display-glassfx-winner {
+    background: url("../images/predictor/orb-glassfx-winner.png");
+}
+
+.result-display-glassfx-nonwinner {
+    background: url("../images/predictor/orb-glassfx-nonwinner.png");
 }
 
 #song-selection {
-    display: flex;
+    position: absolute;
+    margin-top: 184px;
+    margin-left: 72px;
     width: 300px;
     height: 35px;
-    /* padding: 5px; */
-    background: lightcyan;
+    border-radius: 17.5px;
     align-self: center;
     text-align: center;
     overflow: hidden;
-    white-space: nowrap;
+    z-index: 107;
 }
 
 #song-title {
@@ -82,52 +97,68 @@ html {
 }
 
 #song-preview {
-    width: 45px;
+    position: absolute;
+    width: 35px;
     height: 35px;
-    margin-top: -5px;
-    margin-right: -5px;
+    margin-top: -35px;
+    margin-left: 265px;
+    pointer-events: all;
 }
 
 .song-preview-inactive {
-    background: grey;
+    background: url("../images/predictor/orb-play-inactive.png");
 }
 
 .song-preview-pause {
-    background: rgb(0, 145, 145);
+    background: url("../images/predictor/orb-pause-active.png");
     cursor: pointer;
+}
+
+.song-preview-pause:hover {
+    background: url("../images/predictor/orb-pause-hover.png");
 }
 
 .song-preview-play {
-    background: cyan;
+    background: url("../images/predictor/orb-play-active.png");
     cursor: pointer;
 }
 
-#predict-button-container {
-    display: flex;
-    align-self: center;
-    background: grey;
-    width: 200px;
-    border-radius: 15px;
-    /* border: solid; */
-    color: cyan;
-    margin-top: 25px;
+.song-preview-play:hover {
+    background: url("../images/predictor/orb-play-hover.png");
 }
 
 #predict-button {
-    /* height: 50px; */
-    width: 200px;
-    cursor: pointer;
-    border-radius: 15px;
+    position: absolute;
+    margin-top: 252px;
+    margin-left: 83px;
+    pointer-events: all;
+    width: 278px;
+    height: 123px;
+    z-index: 105;
+    pointer-events: visiblePainted;
 }
 
 .predict-button-inactive {
-    background: grey;
+    background: url("../images/predictor/orb-predict-inactive.png");
 }
 
 .predict-button-active {
-    background: cyan;    
+    background: url("../images/predictor/orb-predict-active.png"); 
+    cursor: pointer;
 }
 
+.predict-button-active:hover {
+    background: url("../images/predictor/orb-predict-hover.png");
+}
+
+#predictor-body {
+    position: absolute;
+    margin-top: -25px;
+    width: 444px;
+    height: 400px;
+    background: url("../images/predictor/orb-body.png");
+    z-index: 106;
+}
 
 @keyframes song-title-mover {
     100% { 
