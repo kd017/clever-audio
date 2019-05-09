@@ -21,6 +21,10 @@ select {
     
 }
 
+#table-container {
+    overflow: auto;
+}
+
 #site-head-image {
     transform: translate(10%, -10%);
 }
