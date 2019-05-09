@@ -26,9 +26,14 @@ $(document).ready(function() {
 
     var songImage = $("#song-image");
     var resultDisplay = $("#result-display");
+    var resultDisplayGlassFX = $("#result-display-glassfx");
     var songPreview = $("#song-preview");
 
     var predictButton = $("#predict-button");
+
+
+    // init
+    resultDisplayGlassFX.addClass("result-display-glassfx-inactive");
 
     // =====================================
     // Functions
@@ -165,7 +170,6 @@ $(document).ready(function() {
 
 
 
-    resultDisplay.text("Search for a song...");
 
 
     // =====================================
@@ -188,10 +192,12 @@ $(document).ready(function() {
             selectedSong = "";
             artistDisplay.text("Select an Artist");
             songDisplay.text("Select a Song");
-            resultDisplay.text("Pending song selection...");
-            resultDisplay.removeClass("result-display-winner result-display-loser");
-            songPreview.removeClass("song-preview-play");
+            // resultDisplay.text("Pending song selection...");
+            // resultDisplay.removeClass("result-display-winner result-display-loser");
+            resultDisplay.css("background-image", "");
+            resultDisplay.css("background-color", "");
             songPreview.removeClass("song-preview-pause");
+            songPreview.removeClass("song-preview-play");
             songPreview.addClass("song-preview-inactive");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
@@ -201,7 +207,11 @@ $(document).ready(function() {
                 songPreviewAudio = "";
             }
             
-            songImage.attr("src", "");
+            // songImage.attr("src", "");
+            resultDisplay.css("background-image", "");
+
+            resultDisplayGlassFX.removeClass("result-display-glassfx-active result-display-glassfx-winner result-display-glassfx-nonwinner");
+            resultDisplayGlassFX.addClass("result-display-glassfx-inactive");
         }
     });
 
@@ -252,10 +262,12 @@ $(document).ready(function() {
             selectedSong = "";
             artistDisplay.text("Select an Artist");
             songDisplay.text("Select a Song");
-            resultDisplay.text("Pending song selection...");
-            resultDisplay.removeClass("result-display-winner result-display-loser");
-            songPreview.removeClass("song-preview-play");
+            // resultDisplay.text("Pending song selection...");
+            // resultDisplay.removeClass("result-display-winner result-display-loser");
+            resultDisplay.css("background-image", "");
+            resultDisplay.css("background-color", "");
             songPreview.removeClass("song-preview-pause");
+            songPreview.removeClass("song-preview-play");
             songPreview.addClass("song-preview-inactive");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
@@ -265,7 +277,10 @@ $(document).ready(function() {
                 songPreviewAudio = "";
             }
             
-            songImage.attr("src", "");
+            // songImage.attr("src", "");
+            resultDisplay.css("background-image", "");
+            resultDisplayGlassFX.removeClass("result-display-glassfx-active result-display-glassfx-winner result-display-glassfx-nonwinner");
+            resultDisplayGlassFX.addClass("result-display-glassfx-inactive");
         }
         // Non-selected artist is selected
         else {
@@ -276,10 +291,12 @@ $(document).ready(function() {
             selectedSong = "";
             songDisplay.text("Select a Song");
             artistDisplay.text(selectedArtist);
-            resultDisplay.text("Pending song selection...");
-            resultDisplay.removeClass("result-display-winner result-display-loser");
-            songPreview.removeClass("song-preview-play");
+            // resultDisplay.text("Pending song selection...");
+            // resultDisplay.removeClass("result-display-winner result-display-loser");
+            resultDisplay.css("background-image", "");
+            resultDisplay.css("background-color", "");
             songPreview.removeClass("song-preview-pause");
+            songPreview.removeClass("song-preview-play");
             songPreview.addClass("song-preview-inactive");
             predictButton.addClass("predict-button-inactive");
             predictButton.removeClass("predict-button-active");
@@ -290,7 +307,10 @@ $(document).ready(function() {
                 songPreviewAudio = "";
             }
             
-            songImage.attr("src", "");
+            // songImage.attr("src", "");
+            resultDisplay.css("background-image", "");
+            resultDisplayGlassFX.removeClass("result-display-glassfx-active result-display-glassfx-winner result-display-glassfx-nonwinner");
+            resultDisplayGlassFX.addClass("result-display-glassfx-inactive");
         }
     });
 
@@ -310,11 +330,13 @@ $(document).ready(function() {
         artistDisplay.text(selectedArtist);
         allArtistItems.removeClass("selected");
         $(`#artist-list li[artist="${selectedArtist}"]`).addClass("selected");
-        resultDisplay.text("Click PREDICT");
-        resultDisplay.removeClass("result-display-winner result-display-loser");
+        // resultDisplay.text("Click PREDICT");
+        // resultDisplay.removeClass("result-display-winner result-display-loser");
+        resultDisplay.css("background-image", "");
+        resultDisplay.css("background-color", "");
         songPreview.removeClass("song-preview-inactive");
-        songPreview.removeClass("song-preview-play");
-        songPreview.addClass("song-preview-pause");
+        songPreview.removeClass("song-preview-pause");
+        songPreview.addClass("song-preview-play");
         predictButton.addClass("predict-button-active");
         predictButton.removeClass("predict-button-inactive");
 
@@ -328,24 +350,30 @@ $(document).ready(function() {
             songPreviewAudio = new Audio($(this).attr("preview"));
         }
         else {
-            songPreview.removeClass("song-preview-pause");
+            songPreview.removeClass("song-preview-play");
             songPreview.addClass("song-preview-inactive");
         }
 
-        songImage.attr("src", "");
-        songImage.attr("src", $(this).attr("image"));
+        // songImage.attr("src", "");
+        resultDisplay.css("background-image", "");
+        // songImage.attr("src", $(this).attr("image"));
+        resultDisplay.css("background-image", `url("${$(this).attr("image")}")`);
 
+        resultDisplay.css("background-color", "rgba(0, 255, 255, .5)");
+
+        resultDisplayGlassFX.removeClass("result-display-glassfx-inactive result-display-glassfx-winner result-display-glassfx-nonwinner");
+        resultDisplayGlassFX.addClass("result-display-glassfx-active");
     });
 
     songPreview.on("click", function() {
-        if (songPreview.hasClass("song-preview-pause")) {
-            songPreview.removeClass("song-preview-pause");
-            songPreview.addClass("song-preview-play");
-            songPreviewAudio.play();
-        }
-        else if (songPreview.hasClass("song-preview-play")) {
+        if (songPreview.hasClass("song-preview-play")) {
             songPreview.removeClass("song-preview-play");
             songPreview.addClass("song-preview-pause");
+            songPreviewAudio.play();
+        }
+        else if (songPreview.hasClass("song-preview-pause")) {
+            songPreview.removeClass("song-preview-pause");
+            songPreview.addClass("song-preview-play");
             songPreviewAudio.pause();
         }
     })
@@ -359,15 +387,18 @@ $(document).ready(function() {
                 if (key === "prediction") {
 
                     if (value === "Winner") {
-                        resultDisplay.addClass("result-display-winner");
-                        resultDisplay.text(value);
-                    }
-                    else if (value === "Non-Winner") {
-                        resultDisplay.addClass("result-display-loser");
-                        resultDisplay.text(value);
+                        // resultDisplay.addClass("result-display-winner");
+                        resultDisplay.css("background-color", "rgb(0, 200, 143)");
+                        // resultDisplay.text(value);
+                        resultDisplayGlassFX.removeClass("result-display-glassfx-active result-display-glassfx-inactive result-display-glassfx-nonwinner");
+                        resultDisplayGlassFX.addClass("result-display-glassfx-winner");
                     }
                     else {
-                        resultDisplay.text("Song not found...")
+                        // resultDisplay.addClass("result-display-loser");
+                        resultDisplay.css("background-color", "rgb(200, 130, 0)");
+                        // resultDisplay.text(value);
+                        resultDisplayGlassFX.removeClass("result-display-glassfx-active result-display-glassfx-inactive result-display-glassfx-winner");
+                        resultDisplayGlassFX.addClass("result-display-glassfx-nonwinner");
                     }
                 }
             });
