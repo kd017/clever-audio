@@ -6,6 +6,11 @@ body {
     background-color: rgb(14, 19, 29);
 }
 
+.carousel-inner {
+    height: 360px;
+    width: 600px;
+}
+
 select {
     /* display: block; */
     width: 100%;
