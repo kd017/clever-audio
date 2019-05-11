@@ -30,8 +30,45 @@
 
 
     <body>
-        <div class="container">
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top px-5">
+        <div class="hidden">
+            <script type="text/javascript">
+                    var images = new Array()
+                    function preload() {
+                        for (i = 0; i < preload.arguments.length; i++) {
+                            images[i] = new Image()
+                            images[i].src = preload.arguments[i]
+                        }
+                    }
+                    preload(
+                        "../static/images/predictor/orb-body.png",
+                        "../static/images/predictor/orb-glassfx-inactive.png",
+                        "../static/images/predictor/orb-play-inactive.png",
+                        "../static/images/predictor/orb-predict-inactive.png",
+                        "../static/images/predictor/orb-glassfx-active.pnag",
+                        "../static/images/predictor/orb-glassfx-winner.png",
+                        "../static/images/predictor/orb-glassfx-nonwinner.png",
+                        "../static/images/predictor/orb-play-active.png",
+                        "../static/images/predictor/orb-play-hover.png",
+                        "../static/images/predictor/orb-pause-active.png",
+                        "../static/images/predictor/orb-pause-hover.png",
+                        "../static/images/predictor/orb-predict-active.png",
+                        "../static/images/predictor/orb-predict-hover.png",
+                        "../static/images/predictor/artist-tab-active.png",
+                        "../static/images/predictor/artist-tab-inactive.png",
+                        "../static/images/predictor/artist-tab-hover.png",
+                        "../static/images/predictor/artist-panel-active.png",
+                        "../static/images/predictor/artist-panel-inactive.png",
+                        "../static/images/predictor/song-tab-active.png",
+                        "../static/images/predictor/song-tab-inactive.png",
+                        "../static/images/predictor/song-tab-hover.png",
+                        "../static/images/predictor/song-panel-active.png",
+                        "../static/images/predictor/song-panel-inactive.png"
+                    )
+            </script>
+        </div>
+        <!-- <div class="container p-0"> -->
+        <div class="nav-container">
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark px-5">
     
                 <a class="navbar-brand" href="index.html">
                     <div id="site-head-container">
@@ -56,15 +93,15 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Resources</a>
-                                <div class="dropdown-menu navbar-custom" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" target="_blank"
+                                <div class="dropdown-menu dropdown-menu-right navbar-custom bg-secondary" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item bg-secondary text-light" target="_blank"
                                         href="https://www.grammy.com/recording-academy">Official Grammy Site</a>
-                                    <a class="dropdown-item" target="_blank"
+                                    <a class="dropdown-item bg-secondary text-light" target="_blank"
                                         href="https://www.grammy.com/musicares">Musicares - Recording Academy Charity
                                         Page</a>
-                                    <a class="dropdown-item" target="_blank"
+                                    <a class="dropdown-item bg-secondary text-light" target="_blank"
                                         href="https://www.grammy.com/musicares/donations">Donate to Musicares</a>
-                                    <a class="dropdown-item" target="_blank"
+                                    <a class="dropdown-item bg-secondary text-light" target="_blank"
                                         href="https://www.grammy.com/grammys/awards/hall-of-fame">Grammy Hall of Fame</a>
                                 </div>
                             </div>
@@ -79,6 +116,13 @@
         </div>
         <!-- END NAVBAR -->
 
+        <div class="nav-container text-light p-3 text-center">
+            <div>
+                <p>
+                    Search Spotify's database for your favorite song, then cilck PREDICT to see if it's potentially a Grammy Winner!
+                </p>
+            </div>
+        </div>
         <div class="prediction-container">
             <div id="predict">
                 <div id="result">
@@ -103,7 +147,6 @@
 
             <div id="artist-panel" class="front">
                 <div id="artist-tab" class="artist-tab-active">
-                    <h4>ARTIST</h4>
                 </div>
                 <div id="artist-bg" class="artist-bg-active">
                     <div class="list-panel">
@@ -118,7 +161,6 @@
 
             <div id="song-panel">
                 <div id="song-tab" class="song-tab-inactive">
-                    <h4>SONG</h4>
                 </div>
                 <div id="song-bg" class="song-bg-inactive">
                     <div class="list-panel">
