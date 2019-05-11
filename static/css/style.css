@@ -59,7 +59,7 @@ select {
     padding: 20px;
     margin: 0 auto;
     background: black;
-    background-image: url("../images/abstract-q-c-1920-550-3.jpg");
+    background-image: url("../images/background.jpg");
     background-attachment: fixed;
     background-position: bottom center;
     background-size: cover;
@@ -67,4 +67,7 @@ select {
 
 .parallax h1 {
     padding-top: 180px;
+    font-size: 4em;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
 }
