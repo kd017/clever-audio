@@ -1,22 +1,38 @@
+/* ========================================== */
+/* ===|               PAGE               |=== */
+/* ========================================== */
 html {
     background: rgb(14, 19, 29);
 }
 
-.prediction-container {
+.nav-container {
     margin: 0 auto;
-    margin-top: 90px;
     width: 100%;
-    height: 1400px;
-    min-width: 500px;
-    max-width: 1280px;
+    min-width: 578px;
+    max-width: 1358px;
     transition: width .5s;
     position: relative;
-    display: flex;
+}
+
+.prediction-container {
+    margin: 0 auto;
+    /* margin-top: 50px; */
+    width: 100%;
+    height: 1000px;
+    min-width: 578px;
+    max-width: 1358px;
+    transition: width .5s;
+    position: relative;
+    /* display: flex; */
     justify-content: center;
     overflow: hidden;
 }
 
 
+/* ========================================== */
+/* ===|          PREDICTION ORB          |=== */
+/* ========================================== */
+/* Main shell */
 #predict {
     width: 444px;
     height: 400px;
@@ -24,9 +40,11 @@ html {
     z-index: 100;
     overflow: hidden;
     pointer-events: none;
-    /* margin: 0 auto; */
+    margin: 0 auto;
 }
 
+/* Top glass display */
+/* Backgroud */
 #result-display {
     position: absolute;
     width: 400px;
@@ -40,6 +58,7 @@ html {
     background-blend-mode: multiply;
 }
 
+/* Glow FX & result text */
 #result-display-glassfx {
     position: absolute;
     width: 400px;
@@ -63,6 +82,7 @@ html {
     background: url("../images/predictor/orb-glassfx-nonwinner.png");
 }
 
+/* Display for selected artist and song */
 #song-selection {
     position: absolute;
     margin-top: 184px;
@@ -96,6 +116,7 @@ html {
     padding-right: 15px;
 }
 
+/* Play/Pause button */
 #song-preview {
     position: absolute;
     width: 35px;
@@ -109,15 +130,6 @@ html {
     background: url("../images/predictor/orb-play-inactive.png");
 }
 
-.song-preview-pause {
-    background: url("../images/predictor/orb-pause-active.png");
-    cursor: pointer;
-}
-
-.song-preview-pause:hover {
-    background: url("../images/predictor/orb-pause-hover.png");
-}
-
 .song-preview-play {
     background: url("../images/predictor/orb-play-active.png");
     cursor: pointer;
@@ -127,6 +139,16 @@ html {
     background: url("../images/predictor/orb-play-hover.png");
 }
 
+.song-preview-pause {
+    background: url("../images/predictor/orb-pause-active.png");
+    cursor: pointer;
+}
+
+.song-preview-pause:hover {
+    background: url("../images/predictor/orb-pause-hover.png");
+}
+
+/* Prediction button on the bottom of the orb */
 #predict-button {
     position: absolute;
     margin-top: 252px;
@@ -151,6 +173,7 @@ html {
     background: url("../images/predictor/orb-predict-hover.png");
 }
 
+/* Main body of the predictor orb */
 #predictor-body {
     position: absolute;
     margin-top: -25px;
@@ -166,113 +189,162 @@ html {
     }
 }
 
+
+/* ========================================== */
+/* ===|           ARTIST PANEL           |=== */
+/* ========================================== */
+/* Overall panel container */
 #artist-panel {
     width: 450px;
-    height: 1000px;
+    height: 600px;
     position: absolute;
     left: 0px;
     top: 100px;
+    /* remove pointer events so that the container
+    can be clicked through to the inactive tab */
     pointer-events: none;
     transition: top .5s;
 }
 
+/* Just the tab on the top */
 #artist-tab {
-    padding-left: 20px;
-    width: 150px;
-    padding-top: 1px;
-    padding-bottom: 1px;
+    position: absolute;
+    left: 22px;
+    width: 154px;
+    height: 60px;
     pointer-events: all;
-    cursor: pointer;
+    z-index: 2;
 }
 
 .artist-tab-active {
-    background: darkgrey;
+    background: url("../images/predictor/artist-tab-active.png");
 }
 
 .artist-tab-inactive {
-    background: darkgrey;
+    background: url("../images/predictor/artist-tab-active.png");
 }
 
+/* The panel below the tab */
 #artist-bg {
-    height: 930px;
-    width: 450px;
-    pointer-events: all;
+    position: absolute;
+    top: 22px;
+    left: 8px;
+    height: 565px;
+    width: 489px;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .artist-bg-active {
-    background: darkgrey;
+    background: url("../images/predictor/artist-panel-active.png");
 }
 
 .artist-bg-inactive {
-    background: darkgrey;
+    background: url("../images/predictor/artist-panel-active.png");
 }
 
+
+
+/* ========================================== */
+/* ===|            SONG PANEL            |=== */
+/* ========================================== */
+/* Overall panel container */
 #song-panel {
     width: 450px;
-    height: 1000px;
+    height: 600px;
     position: absolute;
     right: 0px;
     top: 100px;
+    /* remove pointer events so that the container
+    can be clicked through to the inactive tab */
     pointer-events: none;
     transition: top .5s;
-    align-content: flex-end;
 }
 
+/* Just the tab on the top */
+
+
 #song-tab {
-    padding-right: 20px;
-    width: 150px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    margin-left: 300px;
-    text-align: right;
+    position: absolute;
+    right: 22px;
+    width: 154px;
+    height: 60px;
     pointer-events: all;
-    cursor: pointer;
+    z-index: 2;
 }
 
 .song-tab-active {
-    background: darkgrey;
+    background: url("../images/predictor/song-tab-active.png");
 }
 
 .song-tab-inactive {
-    background: darkgrey;
+    background: url("../images/predictor/song-tab-active.png");
 }
 
+/* The panel below the tab */
+
+
 #song-bg {
-    height: 930px;
-    width: 450px;
-    pointer-events: all;
+    position: absolute;
+    top: 22px;
+    right: 0px;
+    height: 565px;
+    width: 489px;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .song-bg-active {
-    background: darkgrey;
+    background: url("../images/predictor/song-panel-active.png");
 }
 
 .song-bg-inactive {
-    background: darkgrey;
+    background: url("../images/predictor/song-panel-active.png");
 }
 
+
+/* ========================================== */
+/* ===|           PANEL SHARED           |=== */
+/* ========================================== */
+/* The list is the same styling for both song
+and artist. */
 .list-panel {
     position: absolute;
-    background: lightgrey;
-    padding-left: 20px;
-    padding-top: 20px;
+    margin-top: 58px;
+    margin-left: 55px;
     width: 410px;
-    height: 890px;
-    margin: 20px;
+    height: 490px;
+    pointer-events: all;
 }
 
+/* Currently the input field and the button
+are the same width.  Will change if there
+is time. */
 .list-panel input {
     width: 185px;
 }
 
 .list-panel ul {
-    height: 825px;
+    margin-top: 10px;
+    height: 410px;
+    width: 370px;
+    /* color: rgb(138, 255, 255); */
     overflow-y: auto;
     /* list-style: none; */
 }
 
+.list-panel ul li {
+    cursor: pointer;
+}
+
+.list-panel ul li:hover {
+    background-color: rgba(50, 255, 255, .5);
+}
+
 .selected {
-    background: cyan;
+    font-weight: bold;
+    background-color: cyan;
+    color: black;
 }
 
 .front {
@@ -280,9 +352,17 @@ html {
 }
 
 
-@media (max-width: 1250px) {
+/* ========================================= */
+/* ===|          MEDIA QUERIES          |=== */
+/* ========================================= */
+/* Artist and song panels start out at the 
+sides of the orb */
+
+/* On smaller displays, the panels collapse
+below the orb, but both are still fully visible */
+@media (max-width: 1358px) {
     .prediction-container {
-        width: 900px;
+        width: 978px;
         transition: width .5s;
     }
 
@@ -297,26 +377,41 @@ html {
     }
 }
 
-@media (max-width: 900px) {
+/* On even smaller displays, the panels collapse
+and overlap each other.  Both tabs are still
+visible and can be clicked to change the active,
+in-front panel.  (see above for active and
+inactive panel classes) */
+@media (max-width: 978px) {
     .prediction-container {
-        width: 500px;
+        width: 578px;
         transition: width .5s;
     }
 
     .artist-tab-inactive {
-        background: grey;
+        background: url("../images/predictor/artist-tab-inactive.png");
+    }
+
+    .artist-tab-inactive:hover {
+        background: url("../images/predictor/artist-tab-hover.png");
+        cursor: pointer;
     }
 
     .artist-bg-inactive {
-        background: grey;
+        background: url("../images/predictor/artist-panel-inactive.png");
     }
 
     .song-tab-inactive {
-        background: grey;
+        background: url("../images/predictor/song-tab-inactive.png");
+    }
+
+    .song-tab-inactive:hover {
+        background: url("../images/predictor/song-tab-hover.png");
+        cursor: pointer;
     }
 
     .song-bg-inactive {
-        background: grey;
+        background: url("../images/predictor/song-panel-inactive.png");
     }
 }
 
