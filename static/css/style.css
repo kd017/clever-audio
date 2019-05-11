@@ -6,6 +6,11 @@ body {
     background-color: rgb(14, 19, 29);
 }
 
+.carousel-inner {
+    height: 360px;
+    width: 600px;
+}
+
 select {
     /* display: block; */
     width: 100%;
@@ -19,6 +24,10 @@ select {
     text-align: center;
     align-content: center;
     
+}
+
+#table-container {
+    overflow: auto;
 }
 
 #site-head-image {
